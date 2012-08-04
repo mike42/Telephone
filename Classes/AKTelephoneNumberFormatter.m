@@ -75,18 +75,34 @@
         break;
         
       case 10:
-        // {{TODO}} handle mobile numbers correctly here 04XX XXX XXX
-        if ([self splitsLastFourDigits]) {  // (##) #### ## ##
-          theString = [NSString stringWithFormat:@"(%@) %@ %@ %@",
-                       [anObject substringWithRange:NSMakeRange(0, 2)],
-                       [anObject substringWithRange:NSMakeRange(2, 4)],
-                       [anObject substringWithRange:NSMakeRange(6, 2)],
-                       [anObject substringWithRange:NSMakeRange(8, 2)]];
-        } else {                            // (##) #### ####
-          theString = [NSString stringWithFormat:@"(%@) %@ %@",
-                       [anObject substringWithRange:NSMakeRange(0, 2)],
-                       [anObject substringWithRange:NSMakeRange(2, 4)],
-                       [anObject substringWithRange:NSMakeRange(6, 4)]];
+        if([[anObject substringWithRange:NSMakeRange(0, 2)] isEqualToString: @"04"]) {
+          // Mobile numbers
+          if ([self splitsLastFourDigits]) {  // 04## ## ## ##
+            theString = [NSString stringWithFormat:@"%@ %@ %@ %@",
+                         [anObject substringWithRange:NSMakeRange(0, 4)],
+                         [anObject substringWithRange:NSMakeRange(4, 2)],
+                         [anObject substringWithRange:NSMakeRange(6, 2)],
+                         [anObject substringWithRange:NSMakeRange(8, 2)]];
+          } else {                            // 04## ### ###
+            theString = [NSString stringWithFormat:@"%@ %@ %@",
+                         [anObject substringWithRange:NSMakeRange(0, 4)],
+                         [anObject substringWithRange:NSMakeRange(4, 3)],
+                         [anObject substringWithRange:NSMakeRange(7, 3)]];
+          }
+        } else {
+          // Landlines etc
+          if ([self splitsLastFourDigits]) {  // (##) #### ## ##
+            theString = [NSString stringWithFormat:@"(%@) %@ %@ %@",
+                         [anObject substringWithRange:NSMakeRange(0, 2)],
+                         [anObject substringWithRange:NSMakeRange(2, 4)],
+                         [anObject substringWithRange:NSMakeRange(6, 2)],
+                         [anObject substringWithRange:NSMakeRange(8, 2)]];
+          } else {                            // (##) #### ####
+            theString = [NSString stringWithFormat:@"(%@) %@ %@",
+                         [anObject substringWithRange:NSMakeRange(0, 2)],
+                         [anObject substringWithRange:NSMakeRange(2, 4)],
+                         [anObject substringWithRange:NSMakeRange(6, 4)]];
+          }
         }
         break;
       default:
